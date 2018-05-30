@@ -1,0 +1,44 @@
+body{
+    background-color: #333;
+}
+
+#game{
+    margin:0 auto;
+    width: 500px;
+    background-color: #666;
+}
+
+.text{
+    padding: 5px;
+}
+
+.space{
+    height:100px;
+    padding: 5px;
+}
+
+#bench-text{
+
+}
+
+#bench-space{
+
+}
+
+#fight-text{
+
+}
+
+#fight-space{
+
+}
+
+#fight-button-div{
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+}
+
+#fight-button{
+
+}
