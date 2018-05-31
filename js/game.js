@@ -103,10 +103,10 @@ var character = function(name, hp, ap, cap){
 $( document ).ready(function() {
     // gameController object
     gameController = {
-        "obiwan" : new character("Obiwan", 6, 4, 4),
-        "anakin" : new character("Anakin", 11, 3, 3),
+        "obiwan" : new character("Obiwan", 9, 4, 4),
+        "anakin" : new character("Anakin", 14, 3, 3),
         "maul" : new character("Maul", 15, 2, 2),
-        "savage" : new character("Savage", 20, 1, 1),
+        "savage" : new character("Savage", 16, 1, 1),
         "currentAttacker" : "none",
         "currentDefender" : "none",
         "currentlyChoosing" : "none",
@@ -142,7 +142,7 @@ $( document ).ready(function() {
                 }
 
                 var defenseDamage = defender.getCAP();
-                if(attacker.takeDamage(defenseDamage && defenderDead === false)){
+                if(defenderDead === false && attacker.takeDamage(defenseDamage)){
                     gameController.setup();
                 }
                 else{
@@ -162,7 +162,7 @@ $( document ).ready(function() {
             this.currentlyChoosing = "attacker";
         },
         "choose" : function(character){
-            if(this.currentlyChoosing === "defender"){
+            if(this.currentlyChoosing === "defender" && character.toLowerCase() != gameController.currentAttacker){
                 this.setDefender(character);
                 this.currentlyChoosing = "none";
             }
