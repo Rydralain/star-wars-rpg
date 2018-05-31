@@ -5,8 +5,10 @@ body{
 #game{
     margin:0 auto;
     width: 500px;
+    height:400px;
     background-color: #666;
     position: relative;
+    overflow: hidden;
 }
 
 .text{
@@ -16,9 +18,9 @@ body{
 }
 
 .space{
-    height:100px;
+    height:125px;
     padding: 5px;
-    /* 110px */
+    /* 135px */
 }
 
 #bench-text{
@@ -48,10 +50,16 @@ body{
 }
 
 .character-image{
-    position:absolute;
-    top:0px;
-    left:0px;
     height:100px;
     width:100px;
     /* visibility: hidden; */
+}
+
+.character-div{
+    position:absolute;
+    top:0px;
+    left:0px;
+    height:125px;
+    width:100px;
+    color: #eee;
 }

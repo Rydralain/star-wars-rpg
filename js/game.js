@@ -5,10 +5,22 @@ var character = function(name, hp, ap, cap){
     this.minAP = ap;
     this.cap = cap;
     
-    $("#game").append('<img id="'+this.name+'" class="character-image" src="./images/'+this.name+'.png">');
+    $("#game").append('<div id="'+this.name+'" class="character-div"><img class="character-image" src="./images/'+this.name+'.png"><span id="'+this.name+'-hp"></span></div');
     this.myDiv = $("#"+this.name);
+    this.myHPDiv = $("#"+this.name+"-hp");
+    this.myHPDiv.text(this.maxHP+" HP");
+    
+    this.reset = function(){
+        this.currentAP = this.minAP;
+        this.myHPDiv.text(this.maxHP+" HP");
+    }
 
-    this.myDiv.on("click", function(){console.log(gameController)
+    this.heal = function(){
+        this.currentHP = this.maxHP;
+        this.myHPDiv.text(this.maxHP+" HP");
+    }
+
+    this.myDiv.on("click", function(){
         gameController.choose(this.id);
     })
 
@@ -35,12 +47,17 @@ var character = function(name, hp, ap, cap){
     }
     this.takeDamage = function(damage){
         this.currentHP -= damage;
+        this.myHPDiv.text(this.currentHP+" HP");
         if(this.currentHP <= 0){
             return true;
         }
         else {
             return false;
         }
+    }
+
+    this.die = function(){
+        this.goToPosition(6);
     }
 
     this.goToPosition = function (position) {
@@ -64,13 +81,16 @@ var character = function(name, hp, ap, cap){
                 newLeft = 365
                 break;
             case 4:
-                newTop = 170;
+                newTop = 195;
                 newLeft = 100;
                 break;
             case 5:
-                newTop = 170;
+                newTop = 195;
                 newLeft = 300;
                 break;
+            case 6:
+                newTop = 500;
+                newLeft = 300;
         }
         this.myDiv.animate({left: newLeft, top: newTop});
     }
@@ -87,8 +107,8 @@ $( document ).ready(function() {
         "anakin" : new character("Anakin", 11, 3, 3),
         "maul" : new character("Maul", 15, 2, 2),
         "savage" : new character("Savage", 20, 1, 1),
-        "currentAttacker" : "",
-        "currentDefender" : "",
+        "currentAttacker" : "none",
+        "currentDefender" : "none",
         "currentlyChoosing" : "none",
         "setAttacker" : function(attacker){
             attacker = attacker.toLowerCase();
@@ -103,24 +123,42 @@ $( document ).ready(function() {
             gameController[defender].goToPosition(5);
         },
         "runAttacks" : function(){
-            var attacker = gameController[gameController.currentAttacker];
-            var defender = gameController[gameController.currentDefender];
+            if(this.currentAttacker != "none" && this.currentDefender != "none"){
+                var attacker = gameController[gameController.currentAttacker];
+                var defender = gameController[gameController.currentDefender];
 
-            var attackDamage = attacker.attack();
-            if(defender.takeDamage(attackDamage)){
-                console.log("die")
-            }
-            else{
-                console.log(attackDamage);
-            }
+                var defenderDead = false;
 
-            var defenseDamage = defender.getCAP();
+                var attackDamage = attacker.attack();
+                if(defender.takeDamage(attackDamage)){
+                    defender.die();
+                    defenderDead = true;
+                    attacker.heal();
+                    gameController.currentDefender = "none";
+                    gameController.currentlyChoosing = "defender";
+                }
+                else{
+                    console.log(attackDamage);
+                }
+
+                var defenseDamage = defender.getCAP();
+                if(attacker.takeDamage(defenseDamage && defenderDead === false)){
+                    gameController.setup();
+                }
+                else{
+                    console.log(defenseDamage);
+                }
+            }
         },
         "setup" : function(){
             gameController.obiwan.goToPosition(0);
+            gameController.obiwan.reset();
             gameController.anakin.goToPosition(1);
+            gameController.anakin.reset();
             gameController.maul.goToPosition(2);
+            gameController.maul.reset();
             gameController.savage.goToPosition(3);
+            gameController.savage.reset();
             this.currentlyChoosing = "attacker";
         },
         "choose" : function(character){
