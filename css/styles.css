@@ -11,11 +11,14 @@ body{
 
 .text{
     padding: 5px;
+    height: 20px;
+    /* 30px */
 }
 
 .space{
     height:100px;
     padding: 5px;
+    /* 110px */
 }
 
 #bench-text{
@@ -50,4 +53,5 @@ body{
     left:0px;
     height:100px;
     width:100px;
+    /* visibility: hidden; */
 }
