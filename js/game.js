@@ -5,8 +5,12 @@ var character = function(name, hp, ap, cap){
     this.minAP = ap;
     this.cap = cap;
     
-    $("#game").append('<img onclick="game.choose('+this.name+')" id="'+this.name+'" class="character-image" src="./images/'+this.name+'.png">');
+    $("#game").append('<img id="'+this.name+'" class="character-image" src="./images/'+this.name+'.png">');
     this.myDiv = $("#"+this.name);
+
+    this.myDiv.on("click", function(){console.log(gameController)
+        gameController.choose(this.id);
+    })
 
     this.selectDefender = function(){
         this.selectFighter();
@@ -77,27 +81,30 @@ var character = function(name, hp, ap, cap){
 
 
 $( document ).ready(function() {
-    // game object
-    var game = {
+    // gameController object
+    gameController = {
         "obiwan" : new character("Obiwan", 6, 4, 4),
         "anakin" : new character("Anakin", 11, 3, 3),
         "maul" : new character("Maul", 15, 2, 2),
         "savage" : new character("Savage", 20, 1, 1),
         "currentAttacker" : "",
         "currentDefender" : "",
+        "currentlyChoosing" : "none",
         "setAttacker" : function(attacker){
-            game.currentAttacker = attacker;
-            game[attacker].selectAttacker();
-            game[attacker].goToPosition(4);
+            attacker = attacker.toLowerCase();
+            gameController.currentAttacker = attacker;
+            gameController[attacker].selectAttacker();
+            gameController[attacker].goToPosition(4);
         },
         "setDefender" : function(defender){
-            game.currentDefender = defender;
-            game[defender].selectDefender();
-            game[defender].goToPosition(5);
+            defender = defender.toLowerCase();
+            gameController.currentDefender = defender;
+            gameController[defender].selectDefender();
+            gameController[defender].goToPosition(5);
         },
         "runAttacks" : function(){
-            var attacker = game[game.currentAttacker];
-            var defender = game[game.currentDefender];
+            var attacker = gameController[gameController.currentAttacker];
+            var defender = gameController[gameController.currentDefender];
 
             var attackDamage = attacker.attack();
             if(defender.takeDamage(attackDamage)){
@@ -110,16 +117,24 @@ $( document ).ready(function() {
             var defenseDamage = defender.getCAP();
         },
         "setup" : function(){
-            game.obiwan.goToPosition(0);
-            game.anakin.goToPosition(1);
-            game.maul.goToPosition(2);
-            game.savage.goToPosition(3);
+            gameController.obiwan.goToPosition(0);
+            gameController.anakin.goToPosition(1);
+            gameController.maul.goToPosition(2);
+            gameController.savage.goToPosition(3);
+            this.currentlyChoosing = "attacker";
         },
-        "choose" : function(){
-            
+        "choose" : function(character){
+            if(this.currentlyChoosing === "defender"){
+                this.setDefender(character);
+                this.currentlyChoosing = "none";
+            }
+            else if(this.currentlyChoosing === "attacker"){
+                this.setAttacker(character);
+                this.currentlyChoosing = "defender";
+            }
         }
 
     }
 
-    game.setup();
+    gameController.setup();
 });
