@@ -6,6 +6,7 @@ body{
     margin:0 auto;
     width: 500px;
     background-color: #666;
+    position: relative;
 }
 
 .text{
@@ -41,4 +42,12 @@ body{
 
 #fight-button{
 
+}
+
+.character-image{
+    position:absolute;
+    top:0px;
+    left:0px;
+    height:100px;
+    width:100px;
 }
