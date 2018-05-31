@@ -96,13 +96,10 @@ var character = function(name, hp, ap, cap){
     }
 }
 
-
-
-
-
 $( document ).ready(function() {
     // gameController object
     gameController = {
+        "remainingCharacters" : 3,
         "obiwan" : new character("Obiwan", 9, 4, 4),
         "anakin" : new character("Anakin", 14, 3, 3),
         "maul" : new character("Maul", 15, 2, 2),
@@ -132,10 +129,14 @@ $( document ).ready(function() {
                 var attackDamage = attacker.attack();
                 if(defender.takeDamage(attackDamage)){
                     defender.die();
+                    gameController.remainingCharacters--;
                     defenderDead = true;
                     attacker.heal();
                     gameController.currentDefender = "none";
                     gameController.currentlyChoosing = "defender";
+                    if(gameController.remainingCharacters == 0){
+                        gameController.setup();
+                    }
                 }
                 else{
                     console.log(attackDamage);
@@ -159,7 +160,8 @@ $( document ).ready(function() {
             gameController.maul.reset();
             gameController.savage.goToPosition(3);
             gameController.savage.reset();
-            this.currentlyChoosing = "attacker";
+            gameController.currentlyChoosing = "attacker";
+            gameController.remainingCharacters = 3;
         },
         "choose" : function(character){
             if(this.currentlyChoosing === "defender" && character.toLowerCase() != gameController.currentAttacker){
