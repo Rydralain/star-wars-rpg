@@ -26,11 +26,9 @@ var character = function(name, hp, ap, cap){
 
     this.selectDefender = function(){
         this.selectFighter();
-        // move to defender space
     }
     this.selectAttacker = function(){
         this.selectFighter();
-        //move to attacker space
     }
     this.selectFighter = function(){
         this.currentHP = this.maxHP;
@@ -112,12 +110,14 @@ $( document ).ready(function() {
             gameController.currentAttacker = attacker;
             gameController[attacker].selectAttacker();
             gameController[attacker].goToPosition(4);
+            $("#bench-text").text("Choose your opponent!");
         },
         "setDefender" : function(defender){
             defender = defender.toLowerCase();
             gameController.currentDefender = defender;
             gameController[defender].selectDefender();
             gameController[defender].goToPosition(5);
+            $("#bench-text").text("Fight!");
         },
         "runAttacks" : function(){
             if(this.currentAttacker != "none" && this.currentDefender != "none"){
@@ -136,18 +136,15 @@ $( document ).ready(function() {
                     gameController.currentlyChoosing = "defender";
                     if(gameController.remainingCharacters == 0){
                         gameController.setup();
+                        $("#fight-text").text("You Win!");
+                        $("#bench-text").text("Choose your fighter!")
                     }
-                }
-                else{
-                    console.log(attackDamage);
                 }
 
                 var defenseDamage = defender.getCAP();
                 if(defenderDead === false && attacker.takeDamage(defenseDamage)){
                     gameController.setup();
-                }
-                else{
-                    console.log(defenseDamage);
+                   $("#fight-text").text("You lose!");
                 }
             }
         },
@@ -162,6 +159,7 @@ $( document ).ready(function() {
             gameController.savage.reset();
             gameController.currentlyChoosing = "attacker";
             gameController.remainingCharacters = 3;
+            $("#bench-text").text("Choose your fighter!")
         },
         "choose" : function(character){
             if(this.currentlyChoosing === "defender" && character.toLowerCase() != gameController.currentAttacker){
