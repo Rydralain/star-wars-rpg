@@ -5,7 +5,7 @@ var character = function(name, hp, ap, cap){
     this.minAP = ap;
     this.cap = cap;
     
-    $("#game").append('<div id="'+this.name+'" class="character-div"><img class="character-image" src="./images/'+this.name+'.png"><span id="'+this.name+'-hp"></span></div');
+    $("#game").append('<div id="'+this.name+'" class="character-div"><img class="character-image" src="./images/'+this.name.toLowerCase()+'.png"><span id="'+this.name+'-hp"></span></div');
     this.myDiv = $("#"+this.name);
     this.myHPDiv = $("#"+this.name+"-hp");
     this.myHPDiv.text(this.maxHP+" HP");
